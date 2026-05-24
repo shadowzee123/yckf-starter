@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Local databases and generated backups
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+backups/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Archives and release artifacts
+*.zip
+release/
+
+# Local duplicate drafts
+* - Copy.*
+* (2).*
+
+# Large submission media should be linked or uploaded separately
+*.mp4
+*.mov
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+
+# TypeScript cache
+*.tsbuildinfo
