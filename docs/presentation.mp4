@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+# upload_video.py
+# Usage: python upload_video.py --url https://example.com/upload [--file "C:\path\to\presentation.mp4"]
+
+import argparse
+import os
+import sys
+import requests
+
+DEFAULT_PATH = r"C:\Users\S APPLETECH\Desktop\shadow work\ycktf-starter\docs\presentation.mp4"
+
+def main():
+    parser = argparse.ArgumentParser(description="Upload a video file via multipart/form-data")
+    parser.add_argument("--url", "-u", required=True, help="Upload endpoint URL")
+    parser.add_argument("--file", "-f", default=DEFAULT_PATH, help="Path to video file")
+    parser.add_argument("--field", default="file", help="Form field name for the file")
+    args = parser.parse_args()
+
+    if not os.path.isfile(args.file):
+        print(f"Error: file not found: {args.file}", file=sys.stderr)
+        sys.exit(1)
+
+    with open(args.file, "rb") as fh:
+        files = {args.field: (os.path.basename(args.file), fh, "video/mp4")}
+        try:
+            resp = requests.post(args.url, files=files, timeout=120)
+        except requests.RequestException as e:
+            print(f"Upload failed: {e}", file=sys.stderr)
+            sys.exit(1)
+
+    print(f"Status: {resp.status_code}")
+    print(resp.text)
+
+if __name__ == "__main__":
+    main()

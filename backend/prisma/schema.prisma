@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id    String @id @default(uuid())
+  name  String @unique
+  users User[]
+}
+
+model User {
+  id          String       @id @default(uuid())
+  email       String       @unique
+  password    String
+  name        String?
+  phone       String?
+  roleId      String?
+  role        Role?        @relation(fields: [roleId], references: [id])
+  enrollments Enrollment[]
+  payments    Payment[]
+  createdAt   DateTime     @default(now())
+}
+
+model Course {
+  id          String       @id @default(uuid())
+  title       String       @unique
+  description String?
+  isPremium   Boolean      @default(false)
+  lessons     Lesson[]
+  enrollments Enrollment[]
+  payments    Payment[]
+}
+
+model Lesson {
+  id       String @id @default(uuid())
+  title    String
+  content  String
+  course   Course @relation(fields: [courseId], references: [id])
+  courseId String
+}
+
+model Enrollment {
+  id          String       @id @default(uuid())
+  user        User         @relation(fields: [userId], references: [id])
+  userId      String
+  course      Course       @relation(fields: [courseId], references: [id])
+  courseId    String
+  progress    Int          @default(0)
+  certificate Certificate?
+  createdAt   DateTime     @default(now())
+}
+
+model Payment {
+  id                String   @id @default(uuid())
+  user              User     @relation(fields: [userId], references: [id])
+  userId            String
+  course            Course?  @relation(fields: [courseId], references: [id])
+  courseId          String?
+  amount            Float
+  currency          String
+  provider          String
+  providerPaymentId String   @unique
+  status            String
+  createdAt         DateTime @default(now())
+}
+
+model Certificate {
+  id           String     @id @default(uuid())
+  enrollment   Enrollment @relation(fields: [enrollmentId], references: [id])
+  enrollmentId String     @unique
+  verifyCode   String     @unique
+  url          String
+  createdAt    DateTime   @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  action    String
+  actorId   String?
+  meta      String?
+  createdAt DateTime @default(now())
+}
+
+model BotLog {
+  id        String   @id @default(uuid())
+  platform  String
+  userRef   String?
+  message   String
+  response  String?
+  createdAt DateTime @default(now())
+}
