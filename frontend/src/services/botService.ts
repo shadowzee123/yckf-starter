@@ -1,7 +1,7 @@
-const API_BASE = (import.meta as any).env?.VITE_API_BASE || 'http://localhost:4000';
+import { apiUrl } from './api';
 
 export async function askBot(message: string, platform = 'web') {
-  const res = await fetch(`${API_BASE}/api/bots/ask`, {
+  const res = await fetch(apiUrl('/api/bots/ask'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ message, platform, userRef: 'demo-user' }),

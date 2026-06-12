@@ -14,14 +14,14 @@ router.get("/dashboard", authenticate, async (req: AuthRequest, res) => {
     orderBy: { createdAt: "desc" },
   });
   const averageProgress = enrollments.length
-    ? Math.round(enrollments.reduce((sum, item) => sum + item.progress, 0) / enrollments.length)
+    ? Math.round(enrollments.reduce((sum: number, item: { progress: number }) => sum + item.progress, 0) / enrollments.length)
     : 0;
 
   return res.json({
     stats: {
       enrolledCourses: enrollments.length,
       averageProgress,
-      certificates: enrollments.filter((item) => item.certificate).length,
+      certificates: enrollments.filter((item: { certificate?: unknown }) => item.certificate).length,
     },
     enrollments,
   });

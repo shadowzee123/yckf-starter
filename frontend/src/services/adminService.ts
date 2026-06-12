@@ -1,7 +1,7 @@
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:4000';
+import { apiUrl } from './api';
 
 export async function fetchUsers(token: string) {
-  const res = await fetch(`${API_BASE}/api/admin/users`, {
+  const res = await fetch(apiUrl('/api/admin/users'), {
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json'

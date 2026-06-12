@@ -1,7 +1,7 @@
-const API_BASE = (import.meta as any).env?.VITE_API_BASE || 'http://localhost:4000';
+import { apiUrl } from './api';
 
 export async function createDemoDonation(token: string, payload: { courseId: string; amount: number; currency: 'GHS' | 'USD' }) {
-  const res = await fetch(`${API_BASE}/api/payments/demo-donation`, {
+  const res = await fetch(apiUrl('/api/payments/demo-donation'), {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({ ...payload, provider: 'demo' }),
